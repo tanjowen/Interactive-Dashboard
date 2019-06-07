@@ -13,15 +13,15 @@ function buildMetadata(sample) {
     // buildGauge(data.WFREQ);
 
   var url = "/metadata/" + sample; 
-  
+  var meta = d3.select("#sample-metadata");
   d3.json(url).then(function(response) {
 
-    console.log(response);
+    // console.log(response);
     var data = response;
-    var meta = d3.select(#sample-metadata);
-    Object.entries(response).forEach(([key, value]) =>
+    
+    Object.entries(data).forEach(([key, value]) =>
       meta.append("p").text(`${key}: ${value}`));
-  })  
+  });  
     
 }
    
@@ -35,33 +35,39 @@ function buildCharts(sample) {
     // otu_ids, and labels (10 each).
   var url = "/samples/" + sample;
   d3.json(url).then(function(response) {
+    var otu_ids = response.otu_ids;
+    var sample_values = response.sample_values;
+    var otu_labels = response.otu_labels;
 
     console.log(response);
     var data = [response];
 
     //BUBBLE CHART
-    var trace1 = {
+    var trace1 = [{
       x: otu_ids,
       y: sample_values,
       text: otu_labels,
       mode: "markers",
       marker: {
         color: otu_ids,
-        size: sample_values
+        size: sample_values,
+        colorscale: "Earth"
       }
-    };
+    }];
     var layout1 = {
-      title: ,
-      showlegend: false,
-      height: 600,
-      width: 1200
+      margin: { t:0 },
+      hovermode: "closest",
+      xaxis: { title: 'asdf' }
+      // height: 600,
+      // width: 1200
     };
-    Plotly.newPlot('bubble', trace1, layout1);
+
+    Plotly.plot("bubble", trace1, layout1);
 
     //PIE CHART
-    var filtered_sample = sample_values.slice(0,11);
-    var filtered_otu_ids = otu_ids.slice(0,11);
-    var filtered_labels = otu_labels.slice(0,11);
+    var filtered_sample = sample_values.slice(0,10);
+    var filtered_otu_ids = otu_ids.slice(0,10);
+    var filtered_labels = otu_labels.slice(0,10);
 
     var trace2 = [{
       values: filtered_sample,
@@ -73,7 +79,8 @@ function buildCharts(sample) {
       height: 400,
       width: 500,
     };
-    Plotly.newPlot('pie', trace2. layout2);
+
+    Plotly.plot("pie", trace2, layout2);
 
   });
 }
