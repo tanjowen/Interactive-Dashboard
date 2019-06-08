@@ -54,23 +54,23 @@ function buildCharts(sample) {
       xaxis: { title: 'OTU ID' }
     };
 
-    Plotly.plot("bubble", trace1, layout1);
+    Plotly.newPlot("bubble", trace1, layout1);
 
     //PIE CHART
     var filtered_sample = sample_values.slice(0,10);
     var filtered_otu_ids = otu_ids.slice(0,10);
     var filtered_labels = otu_labels.slice(0,10);
-
+    console.log(filtered_sample);
     var trace2 = [{
       values: filtered_sample,
       labels: filtered_otu_ids,
-      text: filtered_labels,      
-      hoverinfo: "label+percent+name",
-      textposition: "inside",
+      text: filtered_labels, 
+      hoverinfo: "text+value",
+      textinfo: "percent",      
       type: "pie"
     }];
 
-    Plotly.plot("pie", trace2);
+    Plotly.newPlot("pie", trace2);
 
   });
 }
