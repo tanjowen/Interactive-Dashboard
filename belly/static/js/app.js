@@ -9,16 +9,14 @@ function buildMetadata(sample) {
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
 
-    // BONUS: Build the Gauge Chart
-    // buildGauge(data.WFREQ);
-
   var url = "/metadata/" + sample; 
   var meta = d3.select("#sample-metadata");
-  d3.json(url).then(function(response) {
 
-    // console.log(response);
-    var data = response;
+  d3.json(url).then(function(response) {
     
+    var data = response;
+    meta.html("");
+
     Object.entries(data).forEach(([key, value]) =>
       meta.append("p").text(`${key}: ${value}`));
   });  
@@ -28,11 +26,6 @@ function buildMetadata(sample) {
 
 function buildCharts(sample) {
 
-  // @TODO: Use `d3.json` to fetch the sample data for the plots    
-    // @TODO: Build a Bubble Chart using the sample data
-    // @TODO: Build a Pie Chart
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
   var url = "/samples/" + sample;
   d3.json(url).then(function(response) {
     var otu_ids = response.otu_ids;
@@ -57,9 +50,8 @@ function buildCharts(sample) {
     var layout1 = {
       margin: { t:0 },
       hovermode: "closest",
-      xaxis: { title: 'asdf' }
-      // height: 600,
-      // width: 1200
+      showlegend: true,
+      xaxis: { title: 'OTU ID' }
     };
 
     Plotly.plot("bubble", trace1, layout1);
@@ -72,15 +64,13 @@ function buildCharts(sample) {
     var trace2 = [{
       values: filtered_sample,
       labels: filtered_otu_ids,
-      text: filtered_labels,
+      text: filtered_labels,      
+      hoverinfo: "label+percent+name",
+      textposition: "inside",
       type: "pie"
     }];
-    var layout2 = {
-      height: 400,
-      width: 500,
-    };
 
-    Plotly.plot("pie", trace2, layout2);
+    Plotly.plot("pie", trace2);
 
   });
 }
